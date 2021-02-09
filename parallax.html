@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+	body {
+  background: #222;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+}
+
+#parallax-container {
+  /*background-color: white;*/
+  border: 1px solid lightblue;
+  position: relative;
+  /*overflow: hidden;*/
+  width: 80%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+}
+
+.parallax-wrapper {
+  position: absolute;
+  /*background: white;*/
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform-origin: 50% 50%;
+  transform: translate3d(0px, 0px, 0px);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.parallax-layer {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  position: absolute;
+  display: block;
+  /*transition: transform .1s linear;*/
+}
+
+.figure1 {
+  background: #6A0610;
+  width: 90%;
+  height: 80%;
+  bottom: 5%;
+  left: 5%;
+}
+
+.figure2 {
+  background: #CC1B49;
+  width: 70%;
+  height: 60%;
+  bottom: 0%;
+  left: 10%;
+}
+
+.figure3 {
+  background: #CC1B49;
+  width: 40%;
+  height: 30%;
+  top: 7%;
+  right: 5%;
+}
+
+.picture {
+  background: url('http://beta.quadpack.com/webpac_content/make-up/default/intro/images/object/make-up_01.jpg');
+  width: 30%;
+  height: 80%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  bottom: 0%;
+  left: 45%;  
+}
+
+.parallax-layer.is-out {
+  transform: translate3d(0, 0, 0) !important;
+  transition: transform .4s ease-out;
+}
+</style>
+	<title>preloader trial</title>
+</head>
+<body>
+    <div id="parallax-container">
+        <div class="parallax-wrapper">
+          <div class="parallax-layer figure1" data-depth="0.2"></div>
+          <div class="parallax-layer figure2" data-depth="0.5"></div>
+          <div class="parallax-layer figure3" data-depth="0.8"></div>
+          <div class="parallax-layer picture" data-depth="1.2"></div>
+        </div>
+      </div>
+
+<script>
+ 
+var parallaxBox = $('#parallax-container');
+var strength = 0.2,
+isMobile = false;
+
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+ isMobile = true;
+}
+
+
+function parallaxMove (parallaxContainer, x, y, boxWidth, boxHeight) {
+  $(parallaxContainer).find('.parallax-layer').each(function() {
+    var depth = $(this).data('depth');
+    var moveX = ((boxWidth / 2) - x) * (strength * depth);
+    var moveY = ((boxHeight / 2) - y) * (strength * depth);
+
+    $(this).css({transform: "translate3d(" + moveX + "px, " + moveY + "px, 0)"});
+    $(this).removeClass('is-out');
+  });
+}
+
+
+function resetParallaxPosition (parallaxContainer) {
+  $(parallaxContainer).find('.parallax-layer').each(function() {
+    $(this).css({ transform: "translate3d( 0, 0, 0 )"});
+    $(this).addClass('is-out');
+  });
+  event.stopPropagation();
+}
+
+if(!isMobile) {
+
+  parallaxBox.mousemove(function(event) {
+    event.stopPropagation();
+    event = event || window.event;
+    var x = Math.floor(event.clientX - $(this).offset().left),
+    y = Math.floor(event.clientY - $(this).offset().top),
+    boxWidth = $(this).width(),
+    boxHeight = $(this).height();
+
+    parallaxMove(this, x, y, boxWidth, boxHeight);
+
+  });
+
+  parallaxBox.mouseleave(function(event) {
+    if( !$(event.target).is($(this))) {
+      resetParallaxPosition(this);
+    }
+  });
+
+} else if(isMobile) {
+  var elem = document.getElementById("view3d");
+
+  window.addEventListener("deviceorientation", function(event) {
+    event.stopPropagation();
+    event = event || window.event;
+
+    var rotatedY =  Math.min(Math.max(parseInt(Math.floor(event.gamma)), -45), 45),
+    rotatedX = Math.min(Math.max(parseInt(Math.floor(event.beta)), -45), 45),
+    boxWidth = parallaxBox.width(),
+    boxHeight = parallaxBox.height();
+
+    var moveX = ((boxWidth/2) * rotatedY) / 45;
+    var moveY = ((boxWidth/2) * rotatedX) / 45;
+    
+    parallaxMove(parallaxBox, moveX, moveY, boxWidth, boxHeight);
+
+  });
+}
+
+</script>
+
+</body>
+</html>
