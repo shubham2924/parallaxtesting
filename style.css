@@ -1,0 +1,79 @@
+body {
+    background: #222;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  #parallax-container {
+    /*background-color: white;*/
+    border: 1px solid lightblue;
+    position: relative;
+    /*overflow: hidden;*/
+    width: 80%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backface-visibility: hidden;
+  }
+  
+  .parallax-wrapper {
+    position: absolute;
+    /*background: white;*/
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform-origin: 50% 50%;
+    transform: translate3d(0px, 0px, 0px);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  
+  .parallax-layer {
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    position: absolute;
+    display: block;
+    /*transition: transform .1s linear;*/
+  }
+  
+  .figure1 {
+    background: #6A0610;
+    width: 90%;
+    height: 80%;
+    bottom: 5%;
+    left: 5%;
+  }
+  
+  .figure2 {
+    background: #CC1B49;
+    width: 70%;
+    height: 60%;
+    bottom: 0%;
+    left: 10%;
+  }
+  
+  .figure3 {
+    background: #CC1B49;
+    width: 40%;
+    height: 30%;
+    top: 7%;
+    right: 5%;
+  }
+  
+  .picture {
+    background: url('http://beta.quadpack.com/webpac_content/make-up/default/intro/images/object/make-up_01.jpg');
+    width: 30%;
+    height: 80%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    bottom: 0%;
+    left: 45%;  
+  }
+  
+  .parallax-layer.is-out {
+    transform: translate3d(0, 0, 0) !important;
+    transition: transform .4s ease-out;
+  }
